@@ -14,8 +14,9 @@ fn main() {
     if args.len() > 1 {
         let command = &args[1];
         match &command[..] {
-            "list" | "l" => tasker.list(),
+            "list" => tasker.list(),
             "add" => tasker.add(&args[2..]),
+            "remove" => tasker.remove(&args[2]),
             _ => tasker.list(),
         }
     } else {
