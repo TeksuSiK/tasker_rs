@@ -4,6 +4,8 @@ use std::io::{
     BufReader, Read
 };
 
+use colored::*;
+
 pub struct Tasker {
     pub tasks: Vec<String>
 }
@@ -46,5 +48,22 @@ impl Tasker {
             .collect();
 
         Ok(Tasker { tasks })
+    }
+
+    pub fn list(&self) {
+        for (number, task) in self.tasks.iter().enumerate() {
+            if task.is_empty() {
+                continue;
+            }
+
+            let number = (number + 1).to_string().bold();
+
+            if task.starts_with("~") {
+                let task = task.replace("~", "").strikethrough();
+                println!("{} {}", number, task);
+            } else {
+                println!("{} {}", number, task);
+            }
+        }
     }
 }
