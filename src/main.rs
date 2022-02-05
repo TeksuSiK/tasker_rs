@@ -17,6 +17,7 @@ fn main() {
             "list" => tasker.list(),
             "add" => tasker.add(&args[2..]),
             "remove" => tasker.remove(&args[2]),
+            "done" => tasker.mark_as_done(&args[2]),
             _ => tasker.list(),
         }
     } else {

@@ -93,9 +93,7 @@ impl Tasker {
         }
 
         let file = OpenOptions::new()
-            .read(true)
             .write(true)
-            .create(true)
             .truncate(true)
             .open(&self.path)
             .expect("An error occurred while accessing tasker file");
@@ -111,6 +109,37 @@ impl Tasker {
 
             buffer.write_all(task.as_bytes())
                 .expect("An error occurred while removing task");
+        }
+    }
+
+    pub fn mark_as_done(&self, arg: &str) {
+        if arg.is_empty() {
+            eprintln!("You must enter which item you want do remove");
+        }
+
+        let file = OpenOptions::new()
+            .write(true)
+            .open(&self.path)
+            .expect("An error occurred while accessing tasker file");
+
+        let mut buffer = BufWriter::new(&file);
+    
+        for (number, task) in self.tasks.iter().enumerate() {
+            if (number + 1).to_string() == arg.trim() {
+                if task.starts_with("~") {
+                    let task = task.replace("~", "") + "\n";
+                    buffer.write_all(task.as_bytes())
+                        .expect("An error occured while writing data");
+                } else {
+                    let task = format!("~{}\n", task);
+                    buffer.write_all(task.as_bytes())
+                        .expect("An error occurred while writing data");
+                }
+            } else {
+                let task = format!("{}\n", task);
+                buffer.write_all(task.as_bytes())
+                    .expect("An error occurred while writing data");
+            }
         }
     }
 }
