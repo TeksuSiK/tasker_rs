@@ -1,13 +1,16 @@
 use std::env;
-use std::fs::OpenOptions;
+use std::fs::{
+    File, OpenOptions
+};
 use std::io::{
-    BufReader, Read
+    BufReader, BufWriter, Read, Write
 };
 
 use colored::*;
 
 pub struct Tasker {
-    pub tasks: Vec<String>
+    pub tasks: Vec<String>,
+    pub file: File
 }
 
 impl Tasker {
@@ -47,7 +50,7 @@ impl Tasker {
             .map(str::to_string)
             .collect();
 
-        Ok(Tasker { tasks })
+        Ok(Tasker { tasks, file })
     }
 
     pub fn list(&self) {
@@ -66,4 +69,17 @@ impl Tasker {
             }
         }
     }
+
+    pub fn add(&self, args: &[String]) {
+        if args.is_empty() { 
+            eprintln!("You can't add nothing to your list");
+        }
+
+        let mut buffer = BufWriter::new(&self.file);
+        
+        let args = args.join(" ");
+        
+        buffer.write_all((args + "\n").as_bytes())
+            .expect("An error occured while writing data");
+    }   
 }
