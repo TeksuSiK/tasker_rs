@@ -74,10 +74,8 @@ impl Tasker {
         }
 
         let file = OpenOptions::new()
-            .read(true)
-            .write(true)
             .create(true)
-            .truncate(true)
+            .append(true)
             .open(&self.path)
             .expect("An error occurred while accessing tasker file");
 
