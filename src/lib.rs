@@ -14,7 +14,7 @@ pub struct Tasker {
 impl Tasker {
     pub fn new() -> Result<Tasker, &'static str> {
           let home: String = match env::consts::OS {
-            "linux" => {
+            "linux" | "macos" => {
                 env::var("HOME")
                     .unwrap()
             },
